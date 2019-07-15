@@ -11,12 +11,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -30,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.mob.MobSDK;
 import com.sklk.ticket.R;
 import com.sklk.ticket.base.MyApplication;
@@ -270,7 +273,7 @@ public class ProgressBarWebView extends LinearLayout {
     }
 
     public void loadUrl(Context context, String url) {
-        syncCookie(context, url);
+//        syncCookie(context, url);
         mWebView.loadUrl(url);
     }
 
@@ -281,8 +284,9 @@ public class ProgressBarWebView extends LinearLayout {
         this.mContent = content;
         this.mArticleID = articleID;
         this.mImgName = imgName;
-        syncCookie(mainActivity, url);
+//        syncCookie(mainActivity, url);
         mWebView.loadUrl(url);
+        Log.d(TAG, "loadUrl: " + mWebView.getSettings().getUserAgentString());
     }
 
     public boolean canGoBack() {
@@ -555,6 +559,38 @@ public class ProgressBarWebView extends LinearLayout {
             }
         }
     }
+
+    /**
+     * 分享
+     */
+    @JavascriptInterface
+    public void toShare() {
+//        Logger.i("hybrid" + "appshare");
+//        MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
+//        if (cacheData == null) {
+//            startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
+//        } else {
+//            startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
+//        }
+        Log.d(TAG, "appShare() called");
+    }
+
+    @JavascriptInterface
+    public void toShare(String list) {
+//        Gson gs = new Gson();
+//        ShareModel shareModel = gs.fromJson(list, ShareModel.class);
+//        BottomDialogFragment dialogFragment = new BottomDialogFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("title", shareModel.getTitle());
+//        bundle.putString("content", shareModel.getDescription());
+//        bundle.putString("url", shareModel.getUrl());
+//        bundle.putString("shareImageUrl", shareModel.getUrl());
+//        dialogFragment.setArguments(bundle);
+//        dialogFragment.show(getSupportFragmentManager(), "dialog");
+        Log.d(TAG, "appShare() called with: list = [" + list + "]");
+    }
+
+    private static final String TAG = "ProgressBarWebView";
 
     public void onResume() {
         if (null != mWebView) {

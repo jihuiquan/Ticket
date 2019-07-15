@@ -72,10 +72,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case 1:
                 mShareIv.setVisibility(View.VISIBLE);
 //                mArticleID = intent.getStringExtra("articleID");
-                mImgurl = intent.getStringExtra("articleImageTitleURL");
-                mTitle = intent.getStringExtra("articleTitle");
-                mWords = intent.getStringExtra("articleContentKeyWords");
-                String articleChannelName = intent.getStringExtra("articleChannelName");
+//                mImgurl = intent.getStringExtra("articleImageTitleURL");
+                mImgurl = "https://pic.cnblogs.com/avatar/1142647/20170416093225.png";
+//                mTitle = intent.getStringExtra("articleTitle");
+                mTitle = "Title";
+                mWords = "mWords";
+//                mWords = intent.getStringExtra("articleContentKeyWords");
+//                String articleChannelName = intent.getStringExtra("articleChannelName");
+                String articleChannelName = "articleChannelName";
                 mTitleTv.setText(articleChannelName);
                 mUrl = AppConfig.BASE_IP + "/activity/share" /*+ "?articleId=" + mArticleID*/;
                 mPbwv.loadUrl(this, mUrl, mImgurl, mTitle, mWords, mArticleID, articleChannelName);
