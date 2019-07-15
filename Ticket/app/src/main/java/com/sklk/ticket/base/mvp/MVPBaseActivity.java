@@ -9,10 +9,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.igexin.sdk.PushManager;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.sklk.ticket.mui.LoadDialog;
 import com.sklk.ticket.network.RequestInterface;
 import com.sklk.ticket.network.RetroftServiceManager;
+import com.sklk.ticket.service.ReceivePushService;
+import com.sklk.ticket.service.SinglePushService;
 import com.sklk.ticket.utils.LanguageUtil;
 import com.sklk.ticket.utils.SPUtil;
 import com.sklk.ticket.utils.StatusBarUtil;
@@ -134,6 +137,8 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
     @Override
     protected void onResume() {
         super.onResume();
+        PushManager.getInstance().initialize(getApplicationContext(), SinglePushService.class);
+        PushManager.getInstance().registerPushIntentService(getApplicationContext(), ReceivePushService.class);
         MobclickAgent.onResume(this);
     }
 
