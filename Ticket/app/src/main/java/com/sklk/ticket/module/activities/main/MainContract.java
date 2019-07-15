@@ -12,7 +12,6 @@ import com.sklk.ticket.base.mvp.BaseView;
 
 public class MainContract {
     interface View extends BaseView {
-        
     }
 
     interface  Presenter extends BasePresenter<View> {

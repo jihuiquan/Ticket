@@ -9,7 +9,7 @@ public class AppConfig {
     /**
      * 线上
      */
-    public static String BASE_IP = "http://parent.sunshinelunch.com";
+    public static String BASE_IP = "https://api.51yiyuangouwu.com";
     /**
      * uat
      */

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/share_to"
+        android:textColor="@color/color_black"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/wechat_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:drawableTop="@mipmap/ic_wechat"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/wechat_friends" />
+
+        <TextView
+            android:id="@+id/wechat_qz_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:drawableTop="@mipmap/ic_wechat_qz"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/circle_friends" />
+
+        <TextView
+            android:id="@+id/qq_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:drawableTop="@mipmap/ic_qq"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/share_qq" />
+
+
+        <TextView
+            android:id="@+id/sina_iv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:drawableTop="@mipmap/ic_share_sina"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/share_sina" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cancel_iv"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/base_bg"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="@string/pickerview_cancel"
+        android:textColor="@color/color_black" />
+</LinearLayout>

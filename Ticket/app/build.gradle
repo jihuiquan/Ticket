@@ -71,6 +71,43 @@ android {
     }
 }
 
+MobSDK {
+    appKey "2b94ab38937da"
+    appSecret "d8735a94378d987b67539d7a4e3cc361"
+    ShareSDK {
+        devInfo {
+            Wechat {
+                appId "wx0ee0ee03d25db120"
+                appSecret "e4fa3326ae35b1a6fbb3341426338f72"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
+            WechatMoments {
+                appId "wx0ee0ee03d25db120"
+                appSecret "e4fa3326ae35b1a6fbb3341426338f72"
+            }
+            WechatFavorite {
+                appId "wx0ee0ee03d25db120"
+                appSecret "e4fa3326ae35b1a6fbb3341426338f72"
+            }
+            QQ {
+                appId "101716884"
+                appKey "69548546f8a1e42566b90a073d58e0bd"
+                shareByAppClient true
+                bypassApproval false
+            }
+            SinaWeibo {
+                appKey "2341850999"
+                appSecret "8c06127c2b21a179b9fc97a523678b0d"
+                callbackUri "http://www.sharesdk.cn"
+            }
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$rootProject.appcompatv7Version"

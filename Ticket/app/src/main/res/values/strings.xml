@@ -18,4 +18,24 @@
     <string name="please_login_again">请重新登录</string>
     <string name="wechat_uninstalled">未安装微信,请先安装微信</string>
     <string name="loading_ppp">加载中...</string>
+    <string name="dirtype">/365阳光午餐家长端</string>
+    <string name="complaints">投诉举报</string>
+    <string name="protocol">365阳光午餐服务协议</string>
+    <string name="my_comment">我的评论</string>
+    <string name="prompt">提示</string>
+    <string name="permisstion">权限提示</string>
+    <string name="file_saved_successfully">保存成功!请到文件夹 (/365阳光午餐家长端) 查看</string>
+    <string name="file_saved_faiure">保存失败!请重新保存!</string>
+    <string name="save_image_local">保存图片至本地</string>
+    <string name="share_to">分享到</string>
+    <string name="qq_uninstalled">未安装QQ,请先安装QQ客户端</string>
+    <string name="dial">是否拨打</string>
+    <string name="save_to_folder">保存至文件夹 (/365阳光午餐家长端) 中</string>
+    <string name="permisstion_page">请至权限页面开启存储权限,点击确定跳转</string>
+    <string name="unfind_wechat">未安装微信,请先安装微信</string>
+    <string name="unfind_qq">未安装QQ,请先安装QQ客户端</string>
+    <string name="share_qq">QQ</string>
+    <string name="circle_friends">朋友圈</string>
+    <string name="share_sina">新浪微博</string>
+    <string name="wechat_friends">微信好友</string>
 </resources>

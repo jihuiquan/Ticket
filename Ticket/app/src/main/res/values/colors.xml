@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#fff</color>
+    <color name="colorPrimaryDark">#fff</color>
+    <color name="colorAccent">#f4982b</color>
     <color name="base_line_bg">#e6e6e6</color>
     <color name="color_green">#f4982b</color>
+    <color name="color_black">#000</color>
+    <color name="click_height">#e6e6e6</color>
+    <color name="click_default">#fff</color>
+    <color name="white">#fff</color>
+    <color name="click_water_ripple">#656363</color>
+    <color name="base_bg">#fafafa</color>
 </resources>
