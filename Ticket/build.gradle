@@ -4,11 +4,14 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
-        
+        // 注册MobSDK
+        classpath "com.mob.sdk:MobSDK:2018.0319.1724"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -18,10 +21,40 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    // Sdk and tools
+    minSdkVersion = 19
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    appcompatv7Version = '27.1.1'
+    constraintlayoutVersion = '1.1.0'
+    junitVersion = '4.12'
+    runnerVersion = '1.0.1'
+    espressocoreVersion = '3.0.1'
+
+    // App dependencies
+    butterknifeVersion = '5.1.1'
+    retrofitVersion = '2.0.0-beta4'
+    convertergsonVersion = '2.0.0-beta4'
+    adapterrxjavaVersion = '2.0.0-beta4'
+    rxandroidVersion = '1.1.0'
+    okhttpVersion = '3.1.2'
+    logginginterceptorVersion = '3.9.1'
+    rxlifecycleVersion = '1.0'
+    rxlifecyclecomponentsVersion = '1.0'
+    lottieVersion = '2.0.0-beta4'
+    SmartRefreshLayoutVersion = '1.0.5.1'
+    analyticsVersion = '7.5.4'
+    commonVersion = '1.5.4'
+    glideVersion = '3.7.0'
+    opensdkVersion = 'wechat-sdk-android-without-mta:+'
+    eventbusVersion = '3.1.1'
 }

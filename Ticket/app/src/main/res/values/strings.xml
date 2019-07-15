@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Ticket</string>
+    <string name="error">页面加载失败! \n点击页面重新加载...</string>
+    <string name="error_network">网络不可用! \n请连接可用网络，重新加载...</string>
+    <string name="network_unavailable">网络不可用,请检查网络连接是否可用</string>
+    <string name="network_timeout">网络超时,请重试!</string>
+    <string name="parsing_failure">数据解析失败!</string>
+    <string name="connection_to_server_failed">与服务器连接失败,请重试!</string>
+    <string name="failed_to_get_data">获取数据失败!请重试</string>
+    <string name="timeout_exception">TimeoutException</string>
+    <string name="eof_exception">EOFException</string>
+    <string name="connect_exception">ConnectException</string>
+    <string name="nodata_obtained">未获取到数据，请稍后重试!</string>
+    <string name="dialog_loading">加载中</string>
+    <string name="pickerview_cancel">取消</string>
+    <string name="pickerview_submit">确定</string>
+    <string name="login_invalid">登录失效</string>
+    <string name="please_login_again">请重新登录</string>
+    <string name="wechat_uninstalled">未安装微信,请先安装微信</string>
+    <string name="loading_ppp">加载中...</string>
 </resources>
