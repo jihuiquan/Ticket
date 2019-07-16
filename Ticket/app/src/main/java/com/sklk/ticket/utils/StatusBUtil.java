@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * Created by Administrator on 2018/1/22.
  */
 
-public class StatusBarUtil {
+public class StatusBUtil {
 
 
     /**
@@ -175,6 +175,26 @@ public class StatusBarUtil {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
 
+    }
+
+    public static int getStatusHeight(Activity activity) {
+        int result = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = activity.getResources().getDimensionPixelSize(resourceId);
+        }
+        Class c = null;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            int statusBarHeight = activity.getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        double statusBarHeight = Math.ceil(20 * activity.getResources().getDisplayMetrics().density);
+        return 0;
     }
 
 }

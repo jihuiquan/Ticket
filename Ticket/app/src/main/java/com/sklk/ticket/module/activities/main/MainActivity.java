@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jaeger.library.StatusBarUtil;
 import com.mob.MobSDK;
 import com.sklk.ticket.R;
 import com.sklk.ticket.base.mvp.MVPBaseActivity;
@@ -23,6 +24,7 @@ import com.sklk.ticket.network.HttpResponseCode;
 import com.sklk.ticket.network.RequestInterface;
 import com.sklk.ticket.utils.LanguageUtil;
 import com.sklk.ticket.utils.NetWorkUtil;
+import com.sklk.ticket.utils.StatusBUtil;
 import com.sklk.ticket.utils.StatusCodeUtil;
 import com.sklk.ticket.utils.ToastCommon;
 
@@ -48,10 +50,10 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
 
-    @InjectView(R.id.title_tv)
-    TextView mTitleTv;
-    @InjectView(R.id.share_iv)
-    ImageView mShareIv;
+    //    @InjectView(R.id.title_tv)
+//    TextView mTitleTv;
+//    @InjectView(R.id.share_iv)
+//    ImageView mShareIv;
     @InjectView(R.id.pbwv)
     ProgressBarWebView mPbwv;
     private String mArticleID;
@@ -67,10 +69,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        StatusBUtil.getStatusHeight(this);
         Intent intent = getIntent();
         switch (mType) {
             case 1:
-                mShareIv.setVisibility(View.VISIBLE);
+//                mShareIv.setVisibility(View.VISIBLE);
 //                mArticleID = intent.getStringExtra("articleID");
 //                mImgurl = intent.getStringExtra("articleImageTitleURL");
                 mImgurl = "https://pic.cnblogs.com/avatar/1142647/20170416093225.png";
@@ -80,37 +83,36 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                mWords = intent.getStringExtra("articleContentKeyWords");
 //                String articleChannelName = intent.getStringExtra("articleChannelName");
                 String articleChannelName = "articleChannelName";
-                mTitleTv.setText(articleChannelName);
-                mUrl = AppConfig.BASE_IP + "/activity/share" /*+ "?articleId=" + mArticleID*/;
+//                mTitleTv.setText(articleChannelName);
+                mUrl = AppConfig.BASE_IP + "/index" /*+ "?articleId=" + mArticleID*/;
                 mPbwv.loadUrl(this, mUrl, mImgurl, mTitle, mWords, mArticleID, articleChannelName);
-                mPbwv.setDownloadH5Image(true);
                 break;
             case 2:
-                mShareIv.setVisibility(View.GONE);
-                mTitleTv.setText(getString(R.string.complaints));
+//                mShareIv.setVisibility(View.GONE);
+//                mTitleTv.setText(getString(R.string.complaints));
                 mPbwv.loadUrl(this, AppConfig.BASE_IP + "/pr/complaints.html");
                 break;
             case 3:
-                mShareIv.setVisibility(View.GONE);
-                mTitleTv.setText(getString(R.string.protocol));
+//                mShareIv.setVisibility(View.GONE);
+//                mTitleTv.setText(getString(R.string.protocol));
                 mPbwv.loadUrl(this, AppConfig.BASE_IP + "/pr/agreement.html");
                 break;
             case 4:
                 int commentType = intent.getIntExtra("commentType", 1);
-                mShareIv.setVisibility(View.GONE);
-                mTitleTv.setText(getString(R.string.my_comment));
+//                mShareIv.setVisibility(View.GONE);
+//                mTitleTv.setText(getString(R.string.my_comment));
                 mPbwv.loadUrl(this, AppConfig.BASE_IP + "/pr/myCommentPreload.html" + "?commentType=" + commentType + "&lang=" + LanguageUtil.getCurrentLanguage(this));
                 break;
             case 5:
-                mShareIv.setVisibility(View.VISIBLE);
+//                mShareIv.setVisibility(View.VISIBLE);
                 mArticleID = intent.getStringExtra("articleID");
 //                mPresenter.gGetById(bindObs(getRequestService().gGetById(mArticleID)));
                 break;
             case 6:
-                mShareIv.setVisibility(View.GONE);
+//                mShareIv.setVisibility(View.GONE);
                 String refUrl = intent.getStringExtra("refUrl");
                 String title = intent.getStringExtra("title");
-                mTitleTv.setText(title);
+//                mTitleTv.setText(title);
                 mPbwv.loadUrl(this, refUrl);
                 mPbwv.setDownloadH5Image(true);
                 break;
@@ -120,7 +122,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     }
 
-    @OnClick({R.id.toolbar_left_iv, R.id.share_iv})
+    /*@OnClick({R.id.toolbar_left_iv, R.id.share_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar_left_iv:
@@ -259,7 +261,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             default:
                 break;
         }
-    }
+    }*/
 
     @SuppressLint("WrongConstant")
     private boolean isValidClient(String akp) {

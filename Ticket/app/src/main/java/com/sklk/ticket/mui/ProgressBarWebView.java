@@ -11,9 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -29,23 +26,19 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.mob.MobSDK;
 import com.sklk.ticket.R;
 import com.sklk.ticket.base.MyApplication;
 import com.sklk.ticket.listener.OnClickCommonDialogListener;
 import com.sklk.ticket.listener.OnClickShareDialogListener;
 import com.sklk.ticket.module.activities.main.MainActivity;
-import com.sklk.ticket.network.ExecuteHttpManger;
 import com.sklk.ticket.utils.NetWorkUtil;
 import com.sklk.ticket.utils.PermissionUtil;
 import com.sklk.ticket.utils.SPUtil;
 import com.sklk.ticket.utils.ToastCommon;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,10 +57,6 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  */
 public class ProgressBarWebView extends LinearLayout {
 
-    int mCurrentProgress;
-    int mProgress;
-    private ThisHandler mHandler = new ThisHandler(this);
-    private ProgressBar mProgressBar;
     private WebView mWebView;
     private LinearLayout mLl;
     private String mImageUrl;
@@ -76,32 +65,6 @@ public class ProgressBarWebView extends LinearLayout {
     private String mUrl;
     private String mArticleID;
     private String mImgName;
-
-    private static class ThisHandler extends Handler {
-        private WeakReference<ProgressBarWebView> mainViewWeakReference;
-
-        public ThisHandler(ProgressBarWebView progressBarWebView) {
-            mainViewWeakReference = new WeakReference<>(progressBarWebView);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            ProgressBarWebView menuBannerView = mainViewWeakReference.get();
-            if (null != menuBannerView) {
-                int progress = menuBannerView.mProgress;
-                if (progress < 90) {
-                    menuBannerView.mProgressBar.setProgress(progress);
-                    menuBannerView.openProgressBar(3, 1);
-                } else if (menuBannerView.mCurrentProgress < progress) {
-                    menuBannerView.mProgressBar.setProgress(progress);
-                    menuBannerView.openProgressBar(1, 500);
-                } else {
-                    menuBannerView.mProgressBar.setProgress(progress);
-                    menuBannerView.openProgressBar(3, 1);
-                }
-            }
-        }
-    }
 
     public ProgressBarWebView(Context context) {
         super(context);
@@ -122,7 +85,6 @@ public class ProgressBarWebView extends LinearLayout {
     private void initView(final Context context) {
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         View view = inflate(context, R.layout.progressbar_webview, null);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.pb);
         mWebView = (WebView) view.findViewById(R.id.wv);
         mLl = (LinearLayout) view.findViewById(R.id.ll);
         final TextView errorTv = (TextView) view.findViewById(R.id.error_tv);
@@ -143,13 +105,9 @@ public class ProgressBarWebView extends LinearLayout {
         settings.setBuiltInZoomControls(false);
         mWebView.addJavascriptInterface(new JavaScriptinterface(context),
                 "android");
-
-        //这个方法用于让H5调用android方法
-//        mWv.addJavascriptInterface(this, "android");
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                mCurrentProgress = newProgress;
             }
         });
         mWebView.setWebViewClient(new WebViewClient() {
@@ -158,8 +116,6 @@ public class ProgressBarWebView extends LinearLayout {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                mProgress = 0;
-                openProgressBar(3, 1);
             }
 
             /**
@@ -171,7 +127,6 @@ public class ProgressBarWebView extends LinearLayout {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                mHandler.removeCallbacksAndMessages(null);
                 if (NetWorkUtil.hasNetWork()) {
                     errorTv.setText(getResources().getString(R.string.error));
                 } else {
@@ -180,7 +135,6 @@ public class ProgressBarWebView extends LinearLayout {
                 // 在这里显示自定义错误页
                 mLl.setVisibility(View.VISIBLE);
                 mWebView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.GONE);
             }
         });
         addView(view, lp);
@@ -204,24 +158,6 @@ public class ProgressBarWebView extends LinearLayout {
         }
         return false;
 
-    }
-
-
-    private void openProgressBar(int speed, int delayMillis) {
-        mWebView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        if (mProgress >= 100) {
-            mHandler.removeCallbacksAndMessages(null);
-            mProgressBar.setVisibility(View.GONE);
-            return;
-        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-        if (null != mHandler) {
-            mHandler.removeCallbacksAndMessages(null);
-            mProgress = mProgress + speed;
-            mHandler.sendEmptyMessageDelayed(0, delayMillis);
-        }
     }
 
     public void setDownloadH5Image(boolean b) {
@@ -551,20 +487,11 @@ public class ProgressBarWebView extends LinearLayout {
             context.startActivity(intent);
         }
 
+        /**
+         * 分享
+         */
         @JavascriptInterface
-        public void onFinish() {
-            if (context instanceof Activity) {
-                Activity activity = (Activity) context;
-                activity.finish();
-            }
-        }
-    }
-
-    /**
-     * 分享
-     */
-    @JavascriptInterface
-    public void toShare() {
+        public void toShare() {
 //        Logger.i("hybrid" + "appshare");
 //        MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
 //        if (cacheData == null) {
@@ -572,11 +499,11 @@ public class ProgressBarWebView extends LinearLayout {
 //        } else {
 //            startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
 //        }
-        Log.d(TAG, "appShare() called");
-    }
+            Log.d(TAG, "appShare() called");
+        }
 
-    @JavascriptInterface
-    public void toShare(String list) {
+        @JavascriptInterface
+        public void toShare(String list) {
 //        Gson gs = new Gson();
 //        ShareModel shareModel = gs.fromJson(list, ShareModel.class);
 //        BottomDialogFragment dialogFragment = new BottomDialogFragment();
@@ -587,7 +514,16 @@ public class ProgressBarWebView extends LinearLayout {
 //        bundle.putString("shareImageUrl", shareModel.getUrl());
 //        dialogFragment.setArguments(bundle);
 //        dialogFragment.show(getSupportFragmentManager(), "dialog");
-        Log.d(TAG, "appShare() called with: list = [" + list + "]");
+            Log.d(TAG, "appShare() called with: list = [" + list + "]");
+        }
+
+        @JavascriptInterface
+        public void onFinish() {
+            if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                activity.finish();
+            }
+        }
     }
 
     private static final String TAG = "ProgressBarWebView";
@@ -607,10 +543,6 @@ public class ProgressBarWebView extends LinearLayout {
     }
 
     public void onDestroy() {
-        if (null != mHandler) {
-            mHandler.removeCallbacksAndMessages(null);
-            mHandler = null;
-        }
         if (null != mWebView) {
             mWebView.destroy();
             mWebView = null;

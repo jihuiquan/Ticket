@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.igexin.sdk.PushManager;
+import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.sklk.ticket.mui.LoadDialog;
 import com.sklk.ticket.network.RequestInterface;
@@ -18,7 +20,7 @@ import com.sklk.ticket.service.ReceivePushService;
 import com.sklk.ticket.service.SinglePushService;
 import com.sklk.ticket.utils.LanguageUtil;
 import com.sklk.ticket.utils.SPUtil;
-import com.sklk.ticket.utils.StatusBarUtil;
+import com.sklk.ticket.utils.StatusBUtil;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -71,10 +73,12 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
         }
         mPresenter = getInstance(this, 1);
         mPresenter.attachView((V) this);
+        com.jaeger.library.StatusBarUtil.setTransparent(this);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //禁止横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //修改状态字体颜色
-        StatusBarUtil.StatusBarLightMode(this);
+        StatusBUtil.StatusBarLightMode(this);
     }
 
     public RequestInterface getRequestService() {
