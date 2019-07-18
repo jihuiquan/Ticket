@@ -9,7 +9,7 @@ public class AppConfig {
     /**
      * 线上
      */
-    public static String BASE_IP = "http://coolcuii.eicp.net";
+    public static String BASE_IP = "http://2q567m4973.wicp.vip";
     /**
      * uat
      */

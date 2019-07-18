@@ -41,6 +41,7 @@ import com.sklk.ticket.utils.ToastCommon;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -220,8 +221,17 @@ public class ProgressBarWebView extends LinearLayout {
         this.mContent = content;
         this.mArticleID = articleID;
         this.mImgName = imgName;
-//        syncCookie(mainActivity, url);
-        mWebView.loadUrl(url);
+        syncCookie(mainActivity, url);
+        int statusHeight = 60;
+        Map<String, String> map = new HashMap<>();
+        map.put("jsessionid", null);
+        map.put("appChannel", "luhe");
+        map.put("OSType", "Android");
+        map.put("deviceModel", Build.MODEL);
+        map.put("OSVersion", android.os.Build.VERSION.RELEASE);
+        map.put("appVersion", "1.0.0");
+        map.put("UserAgent", "Android/luhe/" + statusHeight + "/0");
+        mWebView.loadUrl(url, map);
         Log.d(TAG, "loadUrl: " + mWebView.getSettings().getUserAgentString());
     }
 
@@ -485,6 +495,36 @@ public class ProgressBarWebView extends LinearLayout {
             intent.putExtra("articleContentKeyWords", articleContentKeyWords);
             intent.putExtra("articleChannelName", ArticleChannelName);
             context.startActivity(intent);
+        }
+
+        /**
+         * 分享
+         */
+        @JavascriptInterface
+        public void appShare() {
+//            Logger.i("hybrid" + "appshare");
+//            MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
+//            if (cacheData == null) {
+//                startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
+//            } else {
+//                startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
+//            }
+            Log.d(TAG, "appShare() called");
+        }
+
+        /**
+         * 分享
+         */
+        @JavascriptInterface
+        public void appToShare() {
+//            Logger.i("hybrid" + "appshare");
+//            MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
+//            if (cacheData == null) {
+//                startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
+//            } else {
+//                startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
+//            }
+            Log.d(TAG, "appToShare() called");
         }
 
         /**

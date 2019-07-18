@@ -84,7 +84,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                String articleChannelName = intent.getStringExtra("articleChannelName");
                 String articleChannelName = "articleChannelName";
 //                mTitleTv.setText(articleChannelName);
-                mUrl = AppConfig.BASE_IP + "/index" /*+ "?articleId=" + mArticleID*/;
+                mUrl = AppConfig.BASE_IP /*+ "?articleId=" + mArticleID*/;
                 mPbwv.loadUrl(this, mUrl, mImgurl, mTitle, mWords, mArticleID, articleChannelName);
                 break;
             case 2:
