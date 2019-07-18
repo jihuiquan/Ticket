@@ -13,4 +13,5 @@ public class GsonUtil {
         Gson gson = new Gson();
         return gson.toJson(o);
     }
+
 }

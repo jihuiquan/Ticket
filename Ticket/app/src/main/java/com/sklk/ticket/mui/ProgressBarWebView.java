@@ -1,17 +1,13 @@
 package com.sklk.ticket.mui;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -20,7 +16,6 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -28,14 +23,16 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.mob.MobSDK;
 import com.sklk.ticket.R;
 import com.sklk.ticket.base.MyApplication;
-import com.sklk.ticket.listener.OnClickCommonDialogListener;
 import com.sklk.ticket.listener.OnClickShareDialogListener;
 import com.sklk.ticket.module.activities.main.MainActivity;
+import com.sklk.ticket.module.activities.main.ShareBean;
+import com.sklk.ticket.utils.DeviceUtil;
+import com.sklk.ticket.utils.GsonUtil;
 import com.sklk.ticket.utils.NetWorkUtil;
-import com.sklk.ticket.utils.PermissionUtil;
 import com.sklk.ticket.utils.SPUtil;
 import com.sklk.ticket.utils.ToastCommon;
 
@@ -51,6 +48,8 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
+import static android.webkit.WebSettings.LOAD_NO_CACHE;
+
 /**
  * @package: cn.ssic.tianfangcatering.view
  * @author：JHQ
@@ -60,12 +59,6 @@ public class ProgressBarWebView extends LinearLayout {
 
     private WebView mWebView;
     private LinearLayout mLl;
-    private String mImageUrl;
-    private String mTitle;
-    private String mContent;
-    private String mUrl;
-    private String mArticleID;
-    private String mImgName;
 
     public ProgressBarWebView(Context context) {
         super(context);
@@ -97,6 +90,8 @@ public class ProgressBarWebView extends LinearLayout {
         });
         //获取webSettings
         WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setUseWideViewPort(true);//关键点
         //让webView支持JS
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
@@ -104,8 +99,12 @@ public class ProgressBarWebView extends LinearLayout {
         settings.setAllowFileAccess(true);
         //设置支持缩放
         settings.setBuiltInZoomControls(false);
+        settings.setCacheMode(LOAD_NO_CACHE);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         mWebView.addJavascriptInterface(new JavaScriptinterface(context),
                 "android");
+        String ua = mWebView.getSettings().getUserAgentString();
+        mWebView.getSettings().setUserAgentString(ua + "Android/luhe/60/0");
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -161,78 +160,16 @@ public class ProgressBarWebView extends LinearLayout {
 
     }
 
-    public void setDownloadH5Image(boolean b) {
-        if (b) {
-            if (null != mWebView) {
-                mWebView.setOnLongClickListener(new OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(final View view) {
-                        final WebView.HitTestResult hitTestResult = mWebView.getHitTestResult();
-                        if (hitTestResult.getType() == WebView.HitTestResult.IMAGE_TYPE ||
-                                hitTestResult.getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
-                            CommonDialog commonDialog = new CommonDialog(view.getContext(), view.getContext().getString(R.string.prompt), view.getContext().getString(R.string.save_image_local), view.getContext().getString(R.string.save_to_folder));
-                            commonDialog.setOnClickListenerWithCancelAndConfirm(new OnClickCommonDialogListener() {
-                                @Override
-                                public void onConfirmListener() {
-                                    if (!PermissionUtil.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, view.getContext())) {
-                                        SingleDialog singleDialog = new SingleDialog(view.getContext(), view.getContext().getString(R.string.permisstion), view.getContext().getString(R.string.permisstion_page));
-                                        singleDialog.setOnClickListenerWithCancelAndConfirm(new OnClickCommonDialogListener() {
-                                            @Override
-                                            public void onConfirmListener() {
-                                                Uri packageURI = Uri.parse("package:" + view.getContext().getPackageName());
-                                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
-                                                view.getContext().startActivity(intent);
-                                            }
-                                        });
-                                        singleDialog.show();
-                                        return;
-                                    }
-                                    if (URLUtil.isValidUrl(hitTestResult.getExtra())) {
-                                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(hitTestResult.getExtra()));
-                                        request.allowScanningByMediaScanner();
-                                        //设置图片的保存路径
-                                        request.setDestinationInExternalPublicDir(view.getContext().getString(R.string.dirtype), "/" + mImgName + System.currentTimeMillis() + ".png");
-                                        DownloadManager downloadManager = (DownloadManager) view.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                                        downloadManager.enqueue(request);
-                                        ToastCommon.toastSuccessLong(view.getContext(), view.getContext().getString(R.string.file_saved_successfully));
-                                    } else {
-                                        ToastCommon.toast(view.getContext(), R.string.file_saved_faiure);
-                                    }
-                                }
-                            });
-                            commonDialog.show();
-                        }
-                        return false;
-                    }
-                });
-            }
-        }
-    }
-
-    public void loadUrl(Context context, String url) {
-//        syncCookie(context, url);
-        mWebView.loadUrl(url);
-    }
-
-    public void loadUrl(MainActivity mainActivity, String url, String imageUrl, String title, String content, String articleID, String imgName) {
-        this.mUrl = url;
-        this.mImageUrl = imageUrl;
-        this.mTitle = title;
-        this.mContent = content;
-        this.mArticleID = articleID;
-        this.mImgName = imgName;
+    public void loadUrl(MainActivity mainActivity, String url) {
         syncCookie(mainActivity, url);
-        int statusHeight = 60;
         Map<String, String> map = new HashMap<>();
-        map.put("jsessionid", null);
+        map.put("jsessionid", SPUtil.getString(MyApplication.getApplication(), "sessionId"));
         map.put("appChannel", "luhe");
         map.put("OSType", "Android");
         map.put("deviceModel", Build.MODEL);
         map.put("OSVersion", android.os.Build.VERSION.RELEASE);
-        map.put("appVersion", "1.0.0");
-        map.put("UserAgent", "Android/luhe/" + statusHeight + "/0");
+        map.put("appVersion", DeviceUtil.getVersionStr(MyApplication.getApplication()));
         mWebView.loadUrl(url, map);
-        Log.d(TAG, "loadUrl: " + mWebView.getSettings().getUserAgentString());
     }
 
     public boolean canGoBack() {
@@ -250,17 +187,19 @@ public class ProgressBarWebView extends LinearLayout {
             context = c;
         }
 
-        /**
-         * 与js交互时用到的方法，在js里直接调用的
-         */
         @JavascriptInterface
-        public void toChildInfo() {
-            Intent intent = new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+        public void toShare(String list) {
+            ShareBean shareBean = new Gson().fromJson(list, ShareBean.class);
+            shareWebPage(shareBean.getUrl(), shareBean.getTitle(), shareBean.getDescription(), shareBean.getIcon());
+
         }
 
         @JavascriptInterface
-        public void shareWebPage() {
+        public void toLogin(String sessionId) {
+            SPUtil.putString(MyApplication.getApplication(), "sessionId", sessionId);
+        }
+
+        public void shareWebPage(final String url, final String title, final String content, final String imageUrl) {
             SelectShareDialog shareDialog = new SelectShareDialog(context);
             shareDialog.setOnClickListenerWithCancelAndConfirm(new OnClickShareDialogListener() {
                 @Override
@@ -271,12 +210,12 @@ public class ProgressBarWebView extends LinearLayout {
                             if (isValidClient("com.tencent.mm")) {
                                 Platform platform = ShareSDK.getPlatform(Wechat.NAME);
                                 Platform.ShareParams shareParams = new Platform.ShareParams();
-                                shareParams.setText(mContent);
-                                shareParams.setTitle(mTitle);
-                                if (NetWorkUtil.alertImageUri(mImageUrl)) {
-                                    shareParams.setImageUrl(mImageUrl);
+                                shareParams.setText(content);
+                                shareParams.setTitle(title);
+                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                    shareParams.setImageUrl(imageUrl);
                                 }
-                                shareParams.setUrl(mUrl);
+                                shareParams.setUrl(url);
                                 shareParams.setShareType(Platform.SHARE_WEBPAGE);
                                 platform.setPlatformActionListener(new PlatformActionListener() {
                                     @Override
@@ -302,11 +241,11 @@ public class ProgressBarWebView extends LinearLayout {
                             if (isValidClient("com.tencent.mm")) {
                                 Platform wechatMomentsPlatform = ShareSDK.getPlatform(WechatMoments.NAME);
                                 Platform.ShareParams wechatMomentsShareParams = new Platform.ShareParams();
-                                wechatMomentsShareParams.setText(mContent);
-                                wechatMomentsShareParams.setTitle(mTitle);
-                                wechatMomentsShareParams.setUrl(mUrl);//ResourcesManager.getInstace(MobSDK.getContext()).getUrl()
-                                if (NetWorkUtil.alertImageUri(mImageUrl)) {
-                                    wechatMomentsShareParams.setImageUrl(mImageUrl);
+                                wechatMomentsShareParams.setText(content);
+                                wechatMomentsShareParams.setTitle(title);
+                                wechatMomentsShareParams.setUrl(url);//ResourcesManager.getInstace(MobSDK.getContext()).getUrl()
+                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                    wechatMomentsShareParams.setImageUrl(imageUrl);
                                 }
                                 wechatMomentsShareParams.setShareType(Platform.SHARE_WEBPAGE);
                                 wechatMomentsPlatform.setPlatformActionListener(new PlatformActionListener() {
@@ -335,11 +274,11 @@ public class ProgressBarWebView extends LinearLayout {
                             if (isQQClientAvailable(context)) {
                                 Platform platform3 = ShareSDK.getPlatform(QQ.NAME);
                                 Platform.ShareParams shareParams3 = new Platform.ShareParams();
-                                shareParams3.setText(mContent);
-                                shareParams3.setTitle(mTitle);
-                                shareParams3.setTitleUrl(mUrl);
-                                if (NetWorkUtil.alertImageUri(mImageUrl)) {
-                                    shareParams3.setImageUrl(mImageUrl);
+                                shareParams3.setText(content);
+                                shareParams3.setTitle(title);
+                                shareParams3.setTitleUrl(url);
+                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                    shareParams3.setImageUrl(imageUrl);
                                 }
                                 shareParams3.setShareType(Platform.SHARE_WEBPAGE);
                                 platform3.setPlatformActionListener(new PlatformActionListener() {
@@ -367,11 +306,11 @@ public class ProgressBarWebView extends LinearLayout {
                         case 3:
                             Platform sinaPlatform = ShareSDK.getPlatform(SinaWeibo.NAME);
                             Platform.ShareParams sinaShareParams = new Platform.ShareParams();
-                            sinaShareParams.setText(mContent + mUrl);
-                            sinaShareParams.setTitle(mTitle);
-                            sinaShareParams.setTitleUrl(mUrl);
-                            if (NetWorkUtil.alertImageUri(mImageUrl)) {
-                                sinaShareParams.setImageUrl(mImageUrl);
+                            sinaShareParams.setText(content + url);
+                            sinaShareParams.setTitle(title);
+                            sinaShareParams.setTitleUrl(url);
+                            if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                sinaShareParams.setImageUrl(imageUrl);
                             }
                             sinaShareParams.setShareType(Platform.SHARE_WEBPAGE);
                             sinaPlatform.setPlatformActionListener(new PlatformActionListener() {
@@ -436,137 +375,7 @@ public class ProgressBarWebView extends LinearLayout {
             ToastCommon.toast(context, R.string.qq_uninstalled);
             return false;
         }
-
-        @JavascriptInterface
-        public void callToFoodSafety(final String msg) {
-            CommonDialog commonDialog = new CommonDialog(context, context.getString(R.string.prompt), context.getString(R.string.dial) + msg, "");
-            commonDialog.setOnClickListenerWithCancelAndConfirm(new OnClickCommonDialogListener() {
-                @Override
-                public void onConfirmListener() {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    Uri data = Uri.parse("tel:" + msg);
-                    intent.setData(data);
-                    context.startActivity(intent);
-                }
-            });
-            commonDialog.show();
-        }
-
-        @JavascriptInterface
-        public void logout() {
-            CookieManager.getInstance().removeAllCookie();
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.COOKIE_DOMAIN);
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.COOKIE_EXPIRESAT);
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.COOKIE_NAME);
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.COOKIE_PATH);
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.COOKIE_VALUE);
-            SPUtil.remove(MyApplication.getApplication(), SPUtil.STRING_COOKIES);
-            ToastCommon.toast(context, R.string.login_invalid);
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            if (context instanceof Activity) {
-                Activity activity = (Activity) context;
-                activity.finish();
-            }
-            context = null;
-        }
-
-        @JavascriptInterface
-        public void toArticleList() {
-//            MyApplication.getApplication().setMainPage(1);
-            if (context instanceof Activity) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                Activity activity = (Activity) context;
-                activity.finish();
-            }
-            context = null;
-        }
-
-        @JavascriptInterface
-        public void toArticleDetail(String articleId, String articleImageTitleURL, String articleTitle, String articleContentKeyWords, String ArticleChannelName) {
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.putExtra("intent_type", 1);
-            intent.putExtra("articleID", articleId);
-            intent.putExtra("articleImageTitleURL", articleImageTitleURL);
-            intent.putExtra("articleTitle", articleTitle);
-            intent.putExtra("articleContentKeyWords", articleContentKeyWords);
-            intent.putExtra("articleChannelName", ArticleChannelName);
-            context.startActivity(intent);
-        }
-
-        /**
-         * 分享
-         */
-        @JavascriptInterface
-        public void appShare() {
-//            Logger.i("hybrid" + "appshare");
-//            MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
-//            if (cacheData == null) {
-//                startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
-//            } else {
-//                startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
-//            }
-            Log.d(TAG, "appShare() called");
-        }
-
-        /**
-         * 分享
-         */
-        @JavascriptInterface
-        public void appToShare() {
-//            Logger.i("hybrid" + "appshare");
-//            MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
-//            if (cacheData == null) {
-//                startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
-//            } else {
-//                startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
-//            }
-            Log.d(TAG, "appToShare() called");
-        }
-
-        /**
-         * 分享
-         */
-        @JavascriptInterface
-        public void toShare() {
-//        Logger.i("hybrid" + "appshare");
-//        MyUserInfo cacheData = DataCache.instance.getCacheData("heng", "MyUserInfo");
-//        if (cacheData == null) {
-//            startActivityForResult(new Intent(WebActivity.this, CheckPhoneActivity.class), LOGIN_INVITE);
-//        } else {
-//            startActivity(new Intent(WebActivity.this, InviteFriendActivity.class));
-//        }
-            Log.d(TAG, "appShare() called");
-        }
-
-        @JavascriptInterface
-        public void toShare(String list) {
-//        Gson gs = new Gson();
-//        ShareModel shareModel = gs.fromJson(list, ShareModel.class);
-//        BottomDialogFragment dialogFragment = new BottomDialogFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("title", shareModel.getTitle());
-//        bundle.putString("content", shareModel.getDescription());
-//        bundle.putString("url", shareModel.getUrl());
-//        bundle.putString("shareImageUrl", shareModel.getUrl());
-//        dialogFragment.setArguments(bundle);
-//        dialogFragment.show(getSupportFragmentManager(), "dialog");
-            Log.d(TAG, "appShare() called with: list = [" + list + "]");
-        }
-
-        @JavascriptInterface
-        public void onFinish() {
-            if (context instanceof Activity) {
-                Activity activity = (Activity) context;
-                activity.finish();
-            }
-        }
     }
-
-    private static final String TAG = "ProgressBarWebView";
 
     public void onResume() {
         if (null != mWebView) {

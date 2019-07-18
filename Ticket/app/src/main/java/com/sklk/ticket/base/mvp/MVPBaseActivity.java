@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.igexin.sdk.PushManager;
-import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.sklk.ticket.mui.LoadDialog;
 import com.sklk.ticket.network.RequestInterface;
@@ -44,37 +43,12 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String language = SPUtil.getString(this, "language");
-        if (!TextUtils.isEmpty(language)) {
-            switch (language) {
-                case "zh":
-                    DisplayMetrics metrics = getResources().getDisplayMetrics();
-                    Configuration configuration = getResources().getConfiguration();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        configuration.setLocale(Locale.SIMPLIFIED_CHINESE);
-                    } else {
-                        configuration.locale = Locale.SIMPLIFIED_CHINESE;
-                    }
-                    getResources().updateConfiguration(configuration, metrics);
-                    break;
-                case "en":
-                    DisplayMetrics metricsEn = getResources().getDisplayMetrics();
-                    Configuration configurationEn = getResources().getConfiguration();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        configurationEn.setLocale(Locale.UK);
-                    } else {
-                        configurationEn.locale = Locale.UK;
-                    }
-                    getResources().updateConfiguration(configurationEn, metricsEn);
-                    break;
-                default:
-                    break;
-            }
-        }
         mPresenter = getInstance(this, 1);
         mPresenter.attachView((V) this);
-        com.jaeger.library.StatusBarUtil.setTransparent(this);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         //禁止横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //修改状态字体颜色
@@ -160,10 +134,5 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
         if (mPresenter != null) {
             mPresenter.detachView();
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LanguageUtil.attachBaseContext(newBase, SPUtil.getString(newBase, "language")));
     }
 }
