@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.mob.MobSDK;
 import com.sklk.ticket.R;
 import com.sklk.ticket.base.MyApplication;
+import com.sklk.ticket.config.AppConfig;
 import com.sklk.ticket.listener.OnClickShareDialogListener;
 import com.sklk.ticket.module.activities.main.MainActivity;
 import com.sklk.ticket.module.activities.main.ShareBean;
@@ -170,6 +171,7 @@ public class ProgressBarWebView extends LinearLayout {
         map.put("OSVersion", android.os.Build.VERSION.RELEASE);
         map.put("appVersion", DeviceUtil.getVersionStr(MyApplication.getApplication()));
         mWebView.loadUrl(url, map);
+//        mWebView.loadUrl(url);
     }
 
     public boolean canGoBack() {
@@ -190,7 +192,7 @@ public class ProgressBarWebView extends LinearLayout {
         @JavascriptInterface
         public void toShare(String list) {
             ShareBean shareBean = new Gson().fromJson(list, ShareBean.class);
-            shareWebPage(shareBean.getUrl(), shareBean.getTitle(), shareBean.getDescription(), shareBean.getIcon());
+            shareWebPage(AppConfig.BASE_IP + shareBean.getUrl(), shareBean.getTitle(), shareBean.getDescription(), AppConfig.BASE_IP + shareBean.getIcon());
 
         }
 

@@ -45,14 +45,14 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
         super.onCreate(savedInstanceState);
         mPresenter = getInstance(this, 1);
         mPresenter.attachView((V) this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        }
         //禁止横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //修改状态字体颜色
-        StatusBUtil.StatusBarLightMode(this);
+//        StatusBUtil.StatusBarLightMode(this);
     }
 
     public RequestInterface getRequestService() {
