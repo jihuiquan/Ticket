@@ -214,9 +214,9 @@ public class ProgressBarWebView extends LinearLayout {
                                 Platform.ShareParams shareParams = new Platform.ShareParams();
                                 shareParams.setText(content);
                                 shareParams.setTitle(title);
-                                if (NetWorkUtil.alertImageUri(imageUrl)) {
-                                    shareParams.setImageUrl(imageUrl);
-                                }
+//                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                shareParams.setImageUrl(imageUrl);
+//                                }
                                 shareParams.setUrl(url);
                                 shareParams.setShareType(Platform.SHARE_WEBPAGE);
                                 platform.setPlatformActionListener(new PlatformActionListener() {
@@ -246,9 +246,9 @@ public class ProgressBarWebView extends LinearLayout {
                                 wechatMomentsShareParams.setText(content);
                                 wechatMomentsShareParams.setTitle(title);
                                 wechatMomentsShareParams.setUrl(url);//ResourcesManager.getInstace(MobSDK.getContext()).getUrl()
-                                if (NetWorkUtil.alertImageUri(imageUrl)) {
-                                    wechatMomentsShareParams.setImageUrl(imageUrl);
-                                }
+//                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                wechatMomentsShareParams.setImageUrl(imageUrl);
+//                                }
                                 wechatMomentsShareParams.setShareType(Platform.SHARE_WEBPAGE);
                                 wechatMomentsPlatform.setPlatformActionListener(new PlatformActionListener() {
                                     @Override
@@ -279,9 +279,9 @@ public class ProgressBarWebView extends LinearLayout {
                                 shareParams3.setText(content);
                                 shareParams3.setTitle(title);
                                 shareParams3.setTitleUrl(url);
-                                if (NetWorkUtil.alertImageUri(imageUrl)) {
-                                    shareParams3.setImageUrl(imageUrl);
-                                }
+//                                if (NetWorkUtil.alertImageUri(imageUrl)) {
+                                shareParams3.setImageUrl(imageUrl);
+//                                }
                                 shareParams3.setShareType(Platform.SHARE_WEBPAGE);
                                 platform3.setPlatformActionListener(new PlatformActionListener() {
                                     @Override
@@ -311,9 +311,9 @@ public class ProgressBarWebView extends LinearLayout {
                             sinaShareParams.setText(content + url);
                             sinaShareParams.setTitle(title);
                             sinaShareParams.setTitleUrl(url);
-                            if (NetWorkUtil.alertImageUri(imageUrl)) {
-                                sinaShareParams.setImageUrl(imageUrl);
-                            }
+//                            if (NetWorkUtil.alertImageUri(imageUrl)) {
+                            sinaShareParams.setImageUrl(imageUrl);
+//                            }
                             sinaShareParams.setShareType(Platform.SHARE_WEBPAGE);
                             sinaPlatform.setPlatformActionListener(new PlatformActionListener() {
                                 @Override
