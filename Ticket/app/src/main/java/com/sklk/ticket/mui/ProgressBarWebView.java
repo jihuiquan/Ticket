@@ -192,7 +192,7 @@ public class ProgressBarWebView extends LinearLayout {
         @JavascriptInterface
         public void toShare(String list) {
             ShareBean shareBean = new Gson().fromJson(list, ShareBean.class);
-            shareWebPage(AppConfig.BASE_IP + shareBean.getUrl(), shareBean.getTitle(), shareBean.getDescription(), AppConfig.BASE_IP + shareBean.getIcon());
+            shareWebPage(shareBean.getUrl(), shareBean.getTitle(), shareBean.getDescription(), shareBean.getIcon());
 
         }
 
