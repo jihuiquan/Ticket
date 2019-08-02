@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -37,6 +42,7 @@ import com.sklk.ticket.utils.NetWorkUtil;
 import com.sklk.ticket.utils.SPUtil;
 import com.sklk.ticket.utils.ToastCommon;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +64,15 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
  */
 public class ProgressBarWebView extends LinearLayout {
 
-    private WebView mWebView;
+    public WebView mWebView;
     private LinearLayout mLl;
+    //图片
+    private final static int FILE_CHOOSER_RESULT_CODE = 128;
+    //拍照
+    private final static int FILE_CAMERA_RESULT_CODE = 129;
+    //拍照图片路径
+    private String cameraFielPath;
+    private Context mContext;
 
     public ProgressBarWebView(Context context) {
         super(context);
@@ -78,6 +91,7 @@ public class ProgressBarWebView extends LinearLayout {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initView(final Context context) {
+        this.mContext = context;
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         View view = inflate(context, R.layout.progressbar_webview, null);
         mWebView = (WebView) view.findViewById(R.id.wv);
@@ -93,6 +107,14 @@ public class ProgressBarWebView extends LinearLayout {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setUseWideViewPort(true);//关键点
+        settings.setLoadsImagesAutomatically(true);    //支持自动加载图片
+        settings.setUseWideViewPort(true);    //设置webview推荐使用的窗口，使html界面自适应屏幕
+        settings.setLoadWithOverviewMode(true);
+        settings.setSaveFormData(true);    //设置webview保存表单数据
+        settings.setSavePassword(true);    //设置webview保存密码
+        settings.setAppCacheEnabled(true); //设置APP可以缓存
+        settings.setDomStorageEnabled(true);//返回上个界面不刷新  允许本地缓存
+        settings.setAllowFileAccess(true);// 设置可以访问文件
         //让webView支持JS
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
@@ -104,13 +126,13 @@ public class ProgressBarWebView extends LinearLayout {
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         mWebView.addJavascriptInterface(new JavaScriptinterface(context),
                 "android");
+        mWebView.setLongClickable(true);
+        mWebView.setScrollbarFadingEnabled(true);
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        mWebView.setDrawingCacheEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
         mWebView.getSettings().setUserAgentString(ua + "Android/luhe/60/0");
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-            }
-        });
+
         mWebView.setWebViewClient(new WebViewClient() {
 
             //当页面开始加载的时候调用此方法
@@ -162,9 +184,9 @@ public class ProgressBarWebView extends LinearLayout {
     }
 
     public void loadUrl(MainActivity mainActivity, String url) {
-        syncCookie(mainActivity, url);
+//        syncCookie(mainActivity, url);
         Map<String, String> map = new HashMap<>();
-        map.put("jsessionid", SPUtil.getString(MyApplication.getApplication(), "sessionId"));
+//        map.put("jsessionid", SPUtil.getString(MyApplication.getApplication(), "sessionId"));
         map.put("appChannel", "luhe");
         map.put("OSType", "Android");
         map.put("deviceModel", Build.MODEL);
