@@ -9,25 +9,6 @@
     </style>
     <!--NavigationView-->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <!--加载中dialog-->
-    <style name="Loadingdialog" parent="@android:style/Theme.Dialog">
-        <!--无边框-->
-        <item name="android:windowFrame">@null</item>
-        <!--是否浮现在activity之上-->
-        <item name="android:windowIsFloating">true</item>
-        <!--是否半透明-->
-        <item name="android:windowIsTranslucent">true</item>
-        <!--是否显示title-->
-        <item name="android:windowNoTitle">true</item>
-        <!--设置背景-->
-        <item name="android:background">@android:color/transparent</item>
-        <!--显示区域是否透明-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <!--显示区域以外是否使用半透明背景-->
-        <item name="android:backgroundDimEnabled">false</item>
-        <!--遮罩层-->
-        <item name="android:backgroundDimAmount">0.5</item>
-    </style>
 
     <!-- 自定义仿IOS的AlertDialog的样式 -->
     <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
@@ -62,5 +43,24 @@
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/actionsheet_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
+    </style>
+    <!--加载中dialog-->
+    <style name="Loadingdialog" parent="@android:style/Theme.Dialog">
+        <!--无边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否半透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--是否显示title-->
+        <item name="android:windowNoTitle">true</item>
+        <!--设置背景-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--显示区域是否透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--显示区域以外是否使用半透明背景-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--遮罩层-->
+        <item name="android:backgroundDimAmount">0.5</item>
     </style>
 </resources>

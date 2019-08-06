@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/a1_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a2_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a3_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a4_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a5_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a6_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a7_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a8_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a9_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a10_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a11_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a12_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a13_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a14_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a15_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a16_animation"
+        android:duration="45" />
+    <item
+        android:drawable="@drawable/a17_animation"
+        android:duration="45" />
+
+</animation-list>

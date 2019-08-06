@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -17,11 +18,13 @@ import com.sklk.ticket.R;
 import com.sklk.ticket.base.mvp.MVPBaseActivity;
 import com.sklk.ticket.config.AppConfig;
 import com.sklk.ticket.mui.ProgressBarWebView;
+import com.sklk.ticket.utils.MLoading;
 
 import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnPageChange;
 
 
 /**
@@ -44,6 +47,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int FILE_CAMERA_RESULT_CODE = 1;
     private String cameraFielPath;
 
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +81,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 return true;
             }
 
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                Log.d(TAG, "onProgressChanged() called with: view = [" + view + "], newProgress = [" + newProgress + "]");
+                if (newProgress > 95) {
+                    MLoading.dismissLoading();
+                }
+            }
 
         });
         mPbwv.loadUrl(this, mUrl);

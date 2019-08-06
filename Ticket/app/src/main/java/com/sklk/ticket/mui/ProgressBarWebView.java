@@ -38,6 +38,7 @@ import com.sklk.ticket.module.activities.main.MainActivity;
 import com.sklk.ticket.module.activities.main.ShareBean;
 import com.sklk.ticket.utils.DeviceUtil;
 import com.sklk.ticket.utils.GsonUtil;
+import com.sklk.ticket.utils.MLoading;
 import com.sklk.ticket.utils.NetWorkUtil;
 import com.sklk.ticket.utils.SPUtil;
 import com.sklk.ticket.utils.ToastCommon;
@@ -89,6 +90,8 @@ public class ProgressBarWebView extends LinearLayout {
         initView(context);
     }
 
+    private static final String TAG = "ProgressBarWebView";
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initView(final Context context) {
         this.mContext = context;
@@ -132,6 +135,9 @@ public class ProgressBarWebView extends LinearLayout {
         mWebView.setDrawingCacheEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
         mWebView.getSettings().setUserAgentString(ua + "Android/luhe/60/0");
+//        mWebView.setWebChromeClient(new WebChromeClient() {
+//
+//        });
 
         mWebView.setWebViewClient(new WebViewClient() {
 
@@ -139,6 +145,7 @@ public class ProgressBarWebView extends LinearLayout {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                MLoading.showLoading(view.getContext());
             }
 
             /**
