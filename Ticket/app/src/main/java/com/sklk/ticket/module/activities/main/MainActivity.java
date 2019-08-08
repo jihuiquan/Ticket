@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -48,6 +49,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private String cameraFielPath;
 
     private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +88,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 Log.d(TAG, "onProgressChanged() called with: view = [" + view + "], newProgress = [" + newProgress + "]");
                 if (newProgress > 95) {
                     MLoading.dismissLoading();
+                    mPbwv.setVisibility(View.VISIBLE);
                 }
             }
 
         });
         mPbwv.loadUrl(this, mUrl);
+    }
+
+    public void hindView() {
+        mPbwv.setVisibility(View.INVISIBLE);
     }
 
     @Override

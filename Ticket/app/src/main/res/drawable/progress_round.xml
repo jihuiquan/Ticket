@@ -2,55 +2,40 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
     <item
-        android:drawable="@drawable/a1_animation"
+        android:drawable="@drawable/a1"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a2_animation"
+        android:drawable="@drawable/a2"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a3_animation"
+        android:drawable="@drawable/a3"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a4_animation"
+        android:drawable="@drawable/a4"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a5_animation"
+        android:drawable="@drawable/a5"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a6_animation"
+        android:drawable="@drawable/a6"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a7_animation"
+        android:drawable="@drawable/a7"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a8_animation"
+        android:drawable="@drawable/a8"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a9_animation"
+        android:drawable="@drawable/a9"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a10_animation"
+        android:drawable="@drawable/a10"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a11_animation"
+        android:drawable="@drawable/a11"
         android:duration="45" />
     <item
-        android:drawable="@drawable/a12_animation"
-        android:duration="45" />
-    <item
-        android:drawable="@drawable/a13_animation"
-        android:duration="45" />
-    <item
-        android:drawable="@drawable/a14_animation"
-        android:duration="45" />
-    <item
-        android:drawable="@drawable/a15_animation"
-        android:duration="45" />
-    <item
-        android:drawable="@drawable/a16_animation"
-        android:duration="45" />
-    <item
-        android:drawable="@drawable/a17_animation"
+        android:drawable="@drawable/a12"
         android:duration="45" />
 
 </animation-list>

@@ -45,7 +45,7 @@
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
     </style>
     <!--加载中dialog-->
-    <style name="Loadingdialog" parent="@android:style/Theme.Dialog">
+    <style name="Loadingdialog">
         <!--无边框-->
         <item name="android:windowFrame">@null</item>
         <!--是否浮现在activity之上-->

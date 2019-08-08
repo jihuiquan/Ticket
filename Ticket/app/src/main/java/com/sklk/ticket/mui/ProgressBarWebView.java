@@ -74,6 +74,7 @@ public class ProgressBarWebView extends LinearLayout {
     //拍照图片路径
     private String cameraFielPath;
     private Context mContext;
+    private MainActivity mMainActivity;
 
     public ProgressBarWebView(Context context) {
         super(context);
@@ -146,6 +147,9 @@ public class ProgressBarWebView extends LinearLayout {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 MLoading.showLoading(view.getContext());
+                if (null != mMainActivity) {
+                    mMainActivity.hindView();
+                }
             }
 
             /**
@@ -192,6 +196,7 @@ public class ProgressBarWebView extends LinearLayout {
 
     public void loadUrl(MainActivity mainActivity, String url) {
 //        syncCookie(mainActivity, url);
+        this.mMainActivity = mainActivity;
         Map<String, String> map = new HashMap<>();
 //        map.put("jsessionid", SPUtil.getString(MyApplication.getApplication(), "sessionId"));
         map.put("appChannel", "luhe");
